@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <ctype.h>
+#include <stdint.h>
+
+const int STEPS_LIMIT = 50;
+const int CIRCLE_CENTER_X = -10;
+const int CIRCLE_CENTER_Y = -10;
+const int CIRCLE1_CENTER_X = -20;
+const int CIRCLE1_CENTER_Y = -20; 
+const int CIRCLE_RADIUS = 10;
+
+int FuncMax(int a, int b) {
+    return a > b ? a : b;
+}
+
+int FuncMin(int a, int b) {
+    return a < b ? a : b;
+}
+
+
+int FuncAbs(int a) {
+    return a > 0 ? a : -a;
+}
+
+int OblastFunction(int i, int j){
+    int circle, circle1;
+    circle = ((CIRCLE_CENTER_X - i) * (CIRCLE_CENTER_Y - j) + (CIRCLE_CENTER_X - i) * (CIRCLE_CENTER_Y - j));
+    circle1 = ((CIRCLE1_CENTER_X - i) * (CIRCLE1_CENTER_Y - j) + (CIRCLE1_CENTER_X - i) * (CIRCLE1_CENTER_Y - j));
+    return ((circle <= CIRCLE_RADIUS * CIRCLE_RADIUS) && (circle1 <= CIRCLE_RADIUS * CIRCLE_RADIUS)) ? 1 : 0;
+ 
+}
+
+int FuncRemainder(int numb, int d){
+    return numb - ((numb / d) * d);
+}
+
+int main(){
+    int i_0 = 13, j_0 = -9, l_0 = -4;
+    int i = 0, j = 0, l = 0, tmpI = 0, tmpJ = 0, step = 0;
+    while (step <= STEPS_LIMIT){
+        tmpI = i;
+        tmpJ = j;
+        ++step;
+        if (OblastFunction(i, j)){
+            printf("%d", step);
+            return 0;
+        }
+        i = (FuncRemainder(tmpI + tmpJ, 30)) / (FuncRemainder(FuncAbs(l_0), 5) + 1) + (FuncRemainder(tmpI + l_0, 30)) / (FuncRemainder(FuncAbs(tmpJ), 5) + 1);
+        j = (FuncRemainder(FuncMax(step, (step + 1) * tmpJ), 25) - FuncAbs(tmpJ - l_0) / 10);
+        l = (FuncAbs(tmpJ - tmpI) / 10 + FuncMin(FuncRemainder(tmpI + l_0, 20), FuncRemainder(tmpJ * step, 20)) - 10);
+    }
+    printf("Missed the target\nStep %d, %d, %d, %d", step, i, j, l);
+}
